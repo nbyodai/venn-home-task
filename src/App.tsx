@@ -2,7 +2,7 @@ import { useState } from "react";
 
 function App() {
   const [firstName, setFirstName] = useState<string>("");
-  // const [lastName, setLastName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
 
   const [errors, setErrors] = useState<{ firstName?: string; lastName?: string }>({});
 
@@ -17,6 +17,16 @@ function App() {
       newErrors.firstName = "First Name should contain only letters and dashes";
     }
 
+    if (!lastName) {
+      newErrors.lastName = "Last Name is required";
+    } else if (lastName.length < 2) {
+      newErrors.lastName = "Last Name is should be at least 2 characters";
+    }
+    else if (!/^[A-Za-z-]+$/.test(lastName)) {
+      newErrors.lastName = "Last Name should contain only letters and dashes";
+    }
+
+
     setErrors(newErrors);
   }
 
@@ -29,8 +39,9 @@ function App() {
             type="text"
             name="firstName"
             id="firstName"
-            onBlur={handleValidation}
             value={firstName}
+            maxLength={50}
+            onBlur={handleValidation}
             onChange={(e) => setFirstName(e.target.value)}
             required
           />
@@ -40,9 +51,18 @@ function App() {
 
 
         <div>
-          <input type="text" name="lastName" id="lastName" />
+          <input
+            type="text"
+            name="lastName"
+            id="lastName"
+            value={lastName}
+            maxLength={50}
+            onBlur={handleValidation}
+            onChange={(e) => setLastName(e.target.value)}
+            required
+          />
           <label htmlFor="lastName">Last Name</label>
-          <p>Last Name is required</p>
+          {errors.lastName && <p className="text-red-400">{errors.lastName}</p>}
         </div>
       </div>
 

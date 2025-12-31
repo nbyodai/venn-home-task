@@ -44,4 +44,36 @@ describe("App", () => {
     fireEvent.blur(firstNameInput);
     expect(screen.queryByText("First Name should contain only letters and dashes")).not.toBeInTheDocument();
   });
+
+
+    it("renders error when lastName is not provided", () => {
+    render(<App />);
+    const lastNameInput = screen.getByLabelText("Last Name");
+    fireEvent.blur(lastNameInput);
+    expect(screen.getByText("Last Name is required")).toBeInTheDocument();
+  });
+
+  it("renders error when lastName is not minimum 2 characters", () => {
+    render(<App />);
+    const lastNameInput = screen.getByLabelText("Last Name");
+    fireEvent.change(lastNameInput, { target: { value: "A" } });
+    fireEvent.blur(lastNameInput);
+    expect(screen.getByText("Last Name is should be at least 2 characters")).toBeInTheDocument();
+  });
+
+  it("renders error when lastName contains invalid characters", () => {
+    render(<App />);
+    const lastNameInput = screen.getByLabelText("Last Name");
+    fireEvent.change(lastNameInput, { target: { value: "John123" } });
+    fireEvent.blur(lastNameInput);
+    expect(screen.getByText("Last Name should contain only letters and dashes")).toBeInTheDocument();
+  });
+
+  it("renders no error when lastName has a dash", () => {
+    render(<App />);
+    const lastNameInput = screen.getByLabelText("Last Name");
+    fireEvent.change(lastNameInput, { target: { value: "Mary-Jane" } });
+    fireEvent.blur(lastNameInput);
+    expect(screen.queryByText("Last Name should contain only letters and dashes")).not.toBeInTheDocument();
+  });
 });
