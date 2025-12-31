@@ -1,4 +1,5 @@
 import { useState } from "react";
+import TextInput from "./components/TextInput";
 
 function App() {
   const [firstName, setFirstName] = useState<string>("");
@@ -35,34 +36,27 @@ function App() {
       <h1 className="text-3xl font-bold">Onboarding Form</h1>
       <div>
         <div>
-          <input
-            type="text"
+          <TextInput
+            label="First Name"
             name="firstName"
-            id="firstName"
             value={firstName}
-            maxLength={50}
-            onBlur={handleValidation}
             onChange={(e) => setFirstName(e.target.value)}
+            handleValidation={handleValidation}
             required
+            error={errors.firstName}
           />
-          <label htmlFor="firstName">First Name</label>
-          {errors.firstName && <p className="text-red-400">{errors.firstName}</p>}
         </div>
 
-
         <div>
-          <input
-            type="text"
+          <TextInput
+            label="Last Name"
             name="lastName"
-            id="lastName"
             value={lastName}
-            maxLength={50}
-            onBlur={handleValidation}
             onChange={(e) => setLastName(e.target.value)}
+            handleValidation={handleValidation}
             required
+            error={errors.lastName}
           />
-          <label htmlFor="lastName">Last Name</label>
-          {errors.lastName && <p className="text-red-400">{errors.lastName}</p>}
         </div>
       </div>
 
