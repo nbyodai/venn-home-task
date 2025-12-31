@@ -28,4 +28,20 @@ describe("App", () => {
     fireEvent.blur(firstNameInput);
     expect(screen.getByText("First Name is should be at least 2 characters")).toBeInTheDocument();
   });
+
+  it("renders error when firstName contains invalid characters", () => {
+    render(<App />);
+    const firstNameInput = screen.getByLabelText("First Name");
+    fireEvent.change(firstNameInput, { target: { value: "John123" } });
+    fireEvent.blur(firstNameInput);
+    expect(screen.getByText("First Name should contain only letters and dashes")).toBeInTheDocument();
+  });
+
+  it("renders no error when firstName has a dash", () => {
+    render(<App />);
+    const firstNameInput = screen.getByLabelText("First Name");
+    fireEvent.change(firstNameInput, { target: { value: "Mary-Jane" } });
+    fireEvent.blur(firstNameInput);
+    expect(screen.queryByText("First Name should contain only letters and dashes")).not.toBeInTheDocument();
+  });
 });

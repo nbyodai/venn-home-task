@@ -13,6 +13,9 @@ function App() {
     } else if (firstName.length < 2) {
       newErrors.firstName = "First Name is should be at least 2 characters";
     }
+    else if (!/^[A-Za-z-]+$/.test(firstName)) {
+      newErrors.firstName = "First Name should contain only letters and dashes";
+    }
 
     setErrors(newErrors);
   }
