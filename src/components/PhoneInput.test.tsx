@@ -74,4 +74,21 @@ describe('PhoneInput', () => {
 
     expect(handlePhoneValidation).toHaveBeenCalled();
   });
+
+  it('should display error message when provided', () => {
+    const mockHandlers = {
+      handlePhoneValidation: vi.fn(),
+      handlePhoneNumber: vi.fn(),
+    };
+
+    render(
+      <PhoneInput
+        formattedPhoneNumber=""
+        error="Invalid phone number"
+        {...mockHandlers}
+      />
+    );
+
+    expect(screen.getByText('Invalid phone number')).toBeInTheDocument();
+  });
 });
