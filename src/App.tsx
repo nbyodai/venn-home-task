@@ -8,8 +8,9 @@ function App() {
   const [lastName, setLastName] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [formattedPhoneNumber, setFormattedPhoneNumber] = useState<string>("");
+  const [corporationNumber, setCorporationNumber] = useState<string>("");
 
-  const [errors, setErrors] = useState<{ firstName?: string; lastName?: string, phoneNumber?: string }>({});
+  const [errors, setErrors] = useState<{ firstName?: string; lastName?: string, phoneNumber?: string, corporationNumber?: string }>({});
 
   function handleValidation() {
     const newErrors: { firstName?: string; lastName?: string } = {};
@@ -41,6 +42,15 @@ function App() {
       newErrors.phoneNumber = "Phone Number should be 10 digits";
     } else if (isNotValidAreaCode(parseInt(phoneNumber.slice(0, 3), 10))) {
       newErrors.phoneNumber = "Phone Number has invalid area code";
+    }
+    setErrors(newErrors);
+  }
+
+  function handleCorporationValidation() {
+    // to be implemented
+    const newErrors: { corporationNumber?: string } = {};
+    if (!/^\d{9}$/.test(corporationNumber)) {
+      newErrors.corporationNumber = "Corporation Number should be 9 digits";
     }
     setErrors(newErrors);
   }
@@ -89,6 +99,20 @@ function App() {
         handlePhoneNumber={handlePhoneNumber}
         error={errors.phoneNumber}
       />
+
+      <div>
+        <input
+          id="corporationNumber"
+          name="corporationNumber"
+          type="text"
+          required
+          value={corporationNumber}
+          onBlur={handleCorporationValidation}
+          onChange={(e) => setCorporationNumber(e.target.value)}
+        />
+        <label htmlFor="corporationNumber">Corporation Number</label>
+        {errors.corporationNumber && <p className="text-red-400">{errors.corporationNumber}</p>}
+      </div>
 
     </form>
   )

@@ -53,4 +53,37 @@ describe("App", () => {
       expect((inputElement as HTMLInputElement).value).toBe('+1 (204) 456-7890');
     });
   })
+
+  describe('Corporation Number Integration', () => {
+    /**
+     *
+     * Type a corporation number. Length should be 9 chars, should be validated asynchronously by making GET request to a given endpoint. URL https://fe-hometask-api.qa.vault.tryvault.com/corporation-number/:number .
+     * For correct corporation number response will be for example: { "corporationNumber": "123456789", "valid": true }
+     * For bad corporation number there will be: { "valid": false, "message": "Invalid corporation number" }
+     * List of valid corporation numbers (do not hardcode it, only for testing purpose): [ "826417395", "158739264", "123456789", "591863427", "312574689", "287965143", "265398741", "762354918", "468721395", "624719583", ]
+     */
+
+    it("renders the corporation number label", () => {
+      render(<App />);
+      expect(screen.getByText("Corporation Number")).toBeInTheDocument();
+    });
+
+    it("renders error for less than 9 digits", () => {
+      render(<App />);
+      const inputElement = screen.getByLabelText("Corporation Number");
+      expect(inputElement).toBeInTheDocument();
+      fireEvent.change(inputElement, { target: { value: '12345678' } });
+      fireEvent.blur(inputElement);
+      expect(screen.getByText("Corporation Number should be 9 digits")).toBeInTheDocument();
+    });
+
+    it ("renders error for non digit characters", () => {
+      render(<App />);
+      const inputElement = screen.getByLabelText("Corporation Number");
+      expect(inputElement).toBeInTheDocument();
+      fireEvent.change(inputElement, { target: { value: '12345abcd' } });
+      fireEvent.blur(inputElement);
+      expect(screen.getByText("Corporation Number should be 9 digits")).toBeInTheDocument();
+    });
+  });
 });
