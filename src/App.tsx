@@ -1,6 +1,7 @@
 import { useState } from "react";
 import TextInput from "./components/TextInput";
 import { formatPhoneNumber, isNotValidAreaCode } from "./utils";
+import { PhoneInput } from "./components/PhoneInput";
 
 function App() {
   const [firstName, setFirstName] = useState<string>("");
@@ -82,20 +83,12 @@ function App() {
         </div>
       </div>
 
-
-      <div>
-        <input
-          id="phoneNumber"
-          type="tel"
-          value={formattedPhoneNumber}
-          onBlur={handlePhoneValidation}
-          onChange={handlePhoneNumber}
-          required
-          minLength={10}
-        />
-        <label htmlFor="phoneNumber">Phone Number</label>
-        {errors.phoneNumber && <p className="text-red-400">{errors.phoneNumber}</p>}
-      </div>
+      <PhoneInput
+        formattedPhoneNumber={formattedPhoneNumber}
+        handlePhoneValidation={handlePhoneValidation}
+        handlePhoneNumber={handlePhoneNumber}
+        error={errors.phoneNumber}
+      />
 
     </form>
   )
