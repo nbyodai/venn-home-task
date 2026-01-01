@@ -3,19 +3,18 @@ import { render, screen } from '@testing-library/react';
 import { PhoneInput } from './PhoneInput';
 
 describe('PhoneInput', () => {
-    it('should render input with label', () => {
-        const mockHandlers = {
-            handlePhoneValidation: vi.fn(),
-            handlePhoneNumber: vi.fn(),
-        };
+  it('should render input with label', () => {
+    const mockHandlers = {
+      handlePhoneValidation: vi.fn(),
+      handlePhoneNumber: vi.fn(),
+    };
+    render(
+      <PhoneInput
+        formattedPhoneNumber=""
+        {...mockHandlers}
+      />
+    );
 
-        render(
-            <PhoneInput
-                formattedPhoneNumber=""
-                {...mockHandlers}
-            />
-        );
-
-        expect(screen.getByLabelText('Phone Number')).toBeInTheDocument();
-    });
+    expect(screen.getByLabelText('Phone Number')).toBeInTheDocument();
+  });
 });

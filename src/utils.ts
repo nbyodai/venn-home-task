@@ -20,4 +20,4 @@ export function formatPhoneNumber(input: string) {
 
 // https://www.allareacodes.com/canadian_area_codes.htm
 export const isNotValidAreaCode = (code: number) =>
-    ![204,226,236,249,250,289,306,343,387,416,418,431,437,438,450,506,519,548,581,604,613,647,705,709,778,780,782,807,819,867,905,902].includes(code)
+  ![204,226,236,249,250,289,306,343,387,416,418,431,437,438,450,506,519,548,581,604,613,647,705,709,778,780,782,807,819,867,905,902].includes(code)

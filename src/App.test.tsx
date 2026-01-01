@@ -52,5 +52,5 @@ describe("App", () => {
       fireEvent.change(inputElement, { target: { value: '2044567890' } });
       expect((inputElement as HTMLInputElement).value).toBe('+1 (204) 456-7890');
     });
-   })
+  })
 });
