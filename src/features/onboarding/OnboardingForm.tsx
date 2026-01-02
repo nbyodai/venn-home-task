@@ -78,7 +78,7 @@ export function OnboardingForm() {
     });
   }
 
-  const handlePhoneNumber = (e: React.FormEvent<HTMLInputElement>) => {
+  function handlePhoneNumber(e: React.FormEvent<HTMLInputElement>) {
     const inputValue = (e.target as HTMLInputElement).value;
     const rawDigits = inputValue.replace(/\D/g, "");
     if (rawDigits.length > 10) return;
@@ -87,11 +87,11 @@ export function OnboardingForm() {
     setFormattedPhoneNumber(formattedPhoneNumber);
   };
 
-  const handleCorporationNumber = (value: string) => {
+  function handleCorporationNumber(value: string) {
     setCorporationNumber(value);
   };
 
-  const handleSubmit = async(e: React.FormEvent) => {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setStatus("submitting");
     setServerMessage("");
