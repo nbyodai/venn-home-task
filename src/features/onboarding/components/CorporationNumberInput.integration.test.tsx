@@ -19,13 +19,12 @@ describe("CorporationNumberInput Integration", () => {
 
     // User types valid number
     fireEvent.change(input, { target: { value: "123456789" } });
+    expect(handleCorporationNumber).toHaveBeenCalledWith("123456789");
 
     // Wait for 500ms debounce + Network Request
     await waitFor(() => {
-      expect(handleCorporationNumber).toHaveBeenCalledWith("123456789");
+      expect(setIsValid).toHaveBeenCalledWith(true);
     }, { timeout: 2000 });
-
-    expect(setIsValid).toHaveBeenCalledWith(true);
   });
 
   it("sets isValid to false when API returns invalid (Unhappy Path)", async () => {

@@ -11,10 +11,10 @@ export function formatPhoneNumber(input: string) {
     return numberInput;
   } else if (numberInputLength < 7) {
     // if the number input length is 4, 5, or 6, format it accordingly.
-    return `+1 (${numberInput.slice(0, 3)}) ${numberInput.slice(3)}`;
+    return `(${numberInput.slice(0, 3)}) ${numberInput.slice(3)}`;
   } else {
     //  if the number input length is 7, 8, 9, 10, or more, format it like the below.
-    return `+1 (${numberInput.slice(0, 3)}) ${numberInput.slice(3,6)}-${numberInput.slice(6, 10)}`;
+    return `(${numberInput.slice(0, 3)}) ${numberInput.slice(3,6)}-${numberInput.slice(6, 10)}`;
   }
 }
 

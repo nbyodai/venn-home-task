@@ -18,8 +18,7 @@ export function PhoneInput({
       value={formattedPhoneNumber}
       onBlur={handlePhoneValidation}
       onChange={handlePhoneNumber}
-      required
-      minLength={10} />
+      required/>
     <label htmlFor="phoneNumber">Phone Number</label>
     {error && <p className="text-red-400">{error}</p>}
   </div>;

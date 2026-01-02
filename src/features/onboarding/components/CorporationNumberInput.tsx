@@ -29,13 +29,21 @@ export function CorporationNumberInput({
     },
   })
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    // update local state for debouncing/display
+    setCorporationNumber(inputValue);
+    // pass raw value to parent handler
+    handleCorporationNumber(inputValue);
+  };
+
   return <div>
     <input
       name="corporationNumber"
       id="corporationNumber"
       type="text"
       value={corporationNumber}
-      onChange={(e) => setCorporationNumber(e.target.value)}
+      onChange={handleChange}
       onBlur={handleCorporationValidation}
       maxLength={9}
       required/>

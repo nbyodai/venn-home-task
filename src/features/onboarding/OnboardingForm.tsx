@@ -59,11 +59,11 @@ export function OnboardingForm() {
   }
 
   const handlePhoneNumber = (e: React.FormEvent<HTMLInputElement>) => {
-    setPhoneNumber((e.target as HTMLInputElement).value);
-
-    // format phone number
-    const formattedPhoneNumber = formatPhoneNumber((e.target as HTMLInputElement).value);
-    //  set the formatted phone number to the input value
+    const inputValue = (e.target as HTMLInputElement).value;
+    const rawDigits = inputValue.replace(/\D/g, "");
+    if (rawDigits.length > 10) return;
+    setPhoneNumber(rawDigits);
+    const formattedPhoneNumber = formatPhoneNumber(rawDigits);
     setFormattedPhoneNumber(formattedPhoneNumber);
   };
 
