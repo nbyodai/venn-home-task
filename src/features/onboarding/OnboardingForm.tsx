@@ -5,6 +5,13 @@ import { PhoneInput } from "./components/PhoneInput";
 import TextInput from "./components/TextInput";
 import { ENDPOINTS } from "../../api/endpoints";
 
+type OnboardingFormErrorsType = {
+  firstName?: string;
+  lastName?: string;
+  phoneNumber?: string;
+  corporationNumber?: string;
+};
+
 export function OnboardingForm() {
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
@@ -12,7 +19,7 @@ export function OnboardingForm() {
   const [formattedPhoneNumber, setFormattedPhoneNumber] = useState<string>("");
   const [corporationNumber, setCorporationNumber] = useState<string>("");
 
-  const [errors, setErrors] = useState<{ firstName?: string; lastName?: string, phoneNumber?: string, corporationNumber?: string }>({});
+  const [errors, setErrors] = useState<OnboardingFormErrorsType>({});
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [serverMessage, setServerMessage] = useState<string>("");
 
