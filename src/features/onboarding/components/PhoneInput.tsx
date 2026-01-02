@@ -1,4 +1,4 @@
-interface PhoneInputInterface {
+interface PhoneInputProps {
   formattedPhoneNumber: string;
   handlePhoneValidation: () => void;
   handlePhoneNumber: (e: React.FormEvent<HTMLInputElement>) => void;
@@ -10,7 +10,7 @@ export function PhoneInput({
   handlePhoneValidation,
   handlePhoneNumber,
   error
-}: PhoneInputInterface) {
+}: PhoneInputProps) {
   return <div className="flex flex-col gap-1.5">
     <label htmlFor="phoneNumber" className="text-sm font-bold text-gray-800 ml-1">
         Phone Number
