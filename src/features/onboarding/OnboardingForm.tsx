@@ -65,6 +65,19 @@ export function OnboardingForm() {
     setErrors((prevErrors) => ({ ...prevErrors, corporationNumber: corpError }));
   }
 
+  function handleAsyncCorporationNumberValidation(isValid: boolean) {
+    setErrors((prev) => {
+      if (prev.corporationNumber && prev.corporationNumber.includes("digits")) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        corporationNumber: isValid ? undefined : "Invalid Corporation Number"
+      };
+    });
+  }
+
   const handlePhoneNumber = (e: React.FormEvent<HTMLInputElement>) => {
     const inputValue = (e.target as HTMLInputElement).value;
     const rawDigits = inputValue.replace(/\D/g, "");
@@ -157,7 +170,7 @@ export function OnboardingForm() {
           handleCorporationNumber={handleCorporationNumber}
           handleCorporationValidation={handleCorporationValidation}
           error={errors.corporationNumber}
-          setIsValidCorporationNumber={() => {}}
+          setIsValidCorporationNumber={handleAsyncCorporationNumberValidation}
         />
       </div>
 
