@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { ENDPOINTS } from "../../../api/endpoints";
 
 interface UseCorporationValidationParams {
   corporationNumber: string;
@@ -25,7 +26,7 @@ export function useCorporationValidation({
     async function validate() {
       try {
         const response = await fetch(
-          `https://fe-hometask-api.qa.vault.tryvault.com/corporation-number/${corporationNumber}`,
+          ENDPOINTS.CORPORATION_VALIDATION(corporationNumber),
           { signal }
         );
 
