@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDebounce } from "../hooks/useDebounce";
+import { useCorporationValidation } from "../hooks/useCorporationValidation";
 
 interface CorporationNumberInputProps {
   handleCorporationValidation: () => void;
@@ -17,45 +18,16 @@ export function CorporationNumberInput({
   const [corporationNumber, setCorporationNumber] = useState<string>("");
   const debouncedCorporationNumber = useDebounce(corporationNumber, 500);
 
-  useEffect(() => {
-    // Reset validity if user clears input or too short
-    if(debouncedCorporationNumber.length !== 9) {
-      return;
-    }
-
-    const controller = new AbortController();
-    const { signal } = controller;
-
-    async function validateCorporationNumber() {
-      try {
-        const response = await fetch(`https://fe-hometask-api.qa.vault.tryvault.com/corporation-number/${debouncedCorporationNumber}`, { signal });
-        if (!response.ok) {
-          throw new Error("Validation failed");
-        }
-
-        const data = await response.json();
-
-        if (data.valid) {
-          handleCorporationNumber(debouncedCorporationNumber);
-          setIsValidCorporationNumber(true);
-        } else {
-          setIsValidCorporationNumber(false);
-        }
-      } catch (error: unknown) {
-        // Ignore AbortErrors (user changed input), log others
-        if (error instanceof Error && error.name === "AbortError") {
-          return;
-        }
-        if (error instanceof Error) {
-          console.error(error);
-          setIsValidCorporationNumber(false);
-        }
-      }
-    }
-
-    validateCorporationNumber();
-    return () => { controller.abort(); }
-  }, [debouncedCorporationNumber, handleCorporationNumber, setIsValidCorporationNumber]);
+  useCorporationValidation({
+    corporationNumber: debouncedCorporationNumber,
+    onValid: (number: string) => {
+      setIsValidCorporationNumber(true);
+      handleCorporationNumber(number);
+    },
+    onInvalid: () => {
+      setIsValidCorporationNumber(false);
+    },
+  })
 
   return <div>
     <input
