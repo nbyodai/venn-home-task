@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { isNotValidAreaCode, formatPhoneNumber } from "../../utils";
 import { CorporationNumberInput } from "./components/CorporationNumberInput";
 import { PhoneInput } from "./components/PhoneInput";
@@ -31,33 +31,30 @@ export function OnboardingForm() {
     corporationNumber
   });
 
-  function handleNameValidation() {
-    setErrors((prevErrors) => {
-      const nameErrors: { firstName?: string; lastName?: string } = {};
-      if (!firstName) {
-        nameErrors.firstName = "First Name is required";
-      } else if (firstName.length < 2) {
-        nameErrors.firstName = "First Name is should be at least 2 characters";
-      }
-      else if (!/^[A-Za-z-]+$/.test(firstName)) {
-        nameErrors.firstName = "First Name should contain only letters and dashes";
-      } else {
-        nameErrors.firstName = undefined;
-      }
+  const validateName = (field: "firstName" | "lastName") => {
+    // 1. Determine which value to check and what label to use in messages
+    const value = field === "firstName" ? firstName : lastName;
+    const label = field === "firstName" ? "First Name" : "Last Name";
 
-      if (!lastName) {
-        nameErrors.lastName = "Last Name is required";
-      } else if (lastName.length < 2) {
-        nameErrors.lastName = "Last Name is should be at least 2 characters";
+    setErrors((prev) => {
+      let error: string | undefined = undefined;
+
+      // 2. Generic Logic (Works for both)
+      if (!value) {
+        error = `${label} is required`;
+      } else if (value.length < 2) {
+        error = `${label} should be at least 2 characters`;
+      } else if (!/^[A-Za-z-]+$/.test(value)) {
+        error = `${label} should contain only letters and dashes`;
       }
-      else if (!/^[A-Za-z-]+$/.test(lastName)) {
-        nameErrors.lastName = "Last Name should contain only letters and dashes";
-      } else {
-        nameErrors.lastName = undefined;
-      }
-      return { ...prevErrors, ...nameErrors };
+      // 3. Update ONLY the specific key (firstName OR lastName)
+      // We use [field] computed property syntax to target the right one
+      return {
+        ...prev,
+        [field]: error
+      };
     });
-  }
+  };
 
   function handlePhoneValidation() {
     let phoneError: string | undefined = undefined;
@@ -77,8 +74,9 @@ export function OnboardingForm() {
     setErrors((prevErrors) => ({ ...prevErrors, corporationNumber: corpError }));
   }
 
-  function handleAsyncCorporationNumberValidation(isValid: boolean) {
+  const handleAsyncCorporationNumberValidation = useCallback((isValid: boolean) => {
     setErrors((prev) => {
+      // Priority Check: Don't overwrite format errors (like "9 digits")
       if (prev.corporationNumber && prev.corporationNumber.includes("digits")) {
         return prev;
       }
@@ -88,7 +86,7 @@ export function OnboardingForm() {
         corporationNumber: isValid ? undefined : "Invalid Corporation Number"
       };
     });
-  }
+  }, []);
 
   function handlePhoneNumber(e: React.FormEvent<HTMLInputElement>) {
     const inputValue = (e.target as HTMLInputElement).value;
@@ -155,7 +153,7 @@ export function OnboardingForm() {
           name="firstName"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
-          handleValidation={handleNameValidation}
+          handleValidation={() => validateName("firstName")}
           required
           error={errors.firstName}
         />
@@ -165,7 +163,7 @@ export function OnboardingForm() {
           name="lastName"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
-          handleValidation={handleNameValidation}
+          handleValidation={() => validateName("lastName")}
           required
           error={errors.lastName}
         />
