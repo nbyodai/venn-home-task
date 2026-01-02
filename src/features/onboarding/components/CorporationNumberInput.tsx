@@ -37,7 +37,8 @@ export function CorporationNumberInput({
     handleCorporationNumber(inputValue);
   };
 
-  return <div>
+  return <div className="flex flex-col gap-1.5">
+    <label htmlFor="corporationNumber" className="text-sm font-bold text-gray-800 ml-1">Corporation Number</label>
     <input
       name="corporationNumber"
       id="corporationNumber"
@@ -46,8 +47,11 @@ export function CorporationNumberInput({
       onChange={handleChange}
       onBlur={handleCorporationValidation}
       maxLength={9}
-      required/>
-    <label htmlFor="corporationNumber">Corporation Number</label>
-    {error && <p className="text-red-400">{error}</p>}
+      required
+      className={`w-full border rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:ring-1 focus:ring-black focus:border-black transition-colors ${
+        error ? "border-red-500 bg-red-50" : "border-gray-200 bg-white"
+      }`}
+    />
+    {error && <p className="text-red-500 text-sm ml-1">{error}</p>}
   </div>;
 }

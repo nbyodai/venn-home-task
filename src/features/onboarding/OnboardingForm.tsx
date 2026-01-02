@@ -110,59 +110,74 @@ export function OnboardingForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1 className="text-3xl font-bold">Onboarding Form</h1>
-      <div>
-        <div>
-          <TextInput
-            label="First Name"
-            name="firstName"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            handleValidation={handleValidation}
-            required
-            error={errors.firstName}
-          />
-        </div>
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-lg border border-gray-100"
+    >
+      <h1 className="text-3xl font-medium text-center mb-8 text-gray-900">
+        Onboarding Form
+      </h1>
+      <div className="grid grid-cols-2 gap-4 mb-4">
+        <TextInput
+          label="First Name"
+          name="firstName"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          handleValidation={handleValidation}
+          required
+          error={errors.firstName}
+        />
 
-        <div>
-          <TextInput
-            label="Last Name"
-            name="lastName"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            handleValidation={handleValidation}
-            required
-            error={errors.lastName}
-          />
-        </div>
+        <TextInput
+          label="Last Name"
+          name="lastName"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          handleValidation={handleValidation}
+          required
+          error={errors.lastName}
+        />
+      </div>
+      <div className="space-y-4">
+        <PhoneInput
+          formattedPhoneNumber={formattedPhoneNumber}
+          handlePhoneValidation={handlePhoneValidation}
+          handlePhoneNumber={handlePhoneNumber}
+          error={errors.phoneNumber}
+        />
+
+        <CorporationNumberInput
+          handleCorporationNumber={handleCorporationNumber}
+          handleCorporationValidation={handleCorporationValidation}
+          error={errors.corporationNumber}
+          setIsValidCorporationNumber={() => {}}
+        />
       </div>
 
-      <PhoneInput
-        formattedPhoneNumber={formattedPhoneNumber}
-        handlePhoneValidation={handlePhoneValidation}
-        handlePhoneNumber={handlePhoneNumber}
-        error={errors.phoneNumber}
-      />
-
-      <CorporationNumberInput
-        handleCorporationNumber={handleCorporationNumber}
-        handleCorporationValidation={handleCorporationValidation}
-        error={errors.corporationNumber}
-        setIsValidCorporationNumber={() => {}}
-      />
-
-      <div>
-        <button type="submit">
-          {status === "submitting" ? "Submitting..." : "Submit"}
+      <div className="mt-8">
+        <button
+          type="submit"
+          disabled={status === "submitting"}
+          className="w-full bg-black text-white font-medium py-3 px-4 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {status === "submitting" ? (
+            "Submitting..."
+          ) : (
+            <>
+              Submit
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </>
+          )}
         </button>
       </div>
       {status === "success" && (
-        <p className="text-green-600 font-bold mt-2">{serverMessage}</p>
+        <p className="text-green-600 text-center font-medium mt-4">{serverMessage}</p>
       )}
 
       {status === "error" && (
-        <p className="text-red-600 font-bold mt-2">{serverMessage}</p>
+        <p className="text-red-500 text-center font-medium mt-4">{serverMessage}</p>
       )}
 
     </form>
