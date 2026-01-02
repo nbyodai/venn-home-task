@@ -2,6 +2,7 @@ import { useState } from "react";
 import TextInput from "./components/TextInput";
 import { formatPhoneNumber, isNotValidAreaCode } from "./utils";
 import { PhoneInput } from "./components/PhoneInput";
+import { CorporationNumberInput } from "./components/CorporationNumberInput";
 
 function App() {
   const [firstName, setFirstName] = useState<string>("");
@@ -47,7 +48,6 @@ function App() {
   }
 
   function handleCorporationValidation() {
-    // to be implemented
     const newErrors: { corporationNumber?: string } = {};
     if (!/^\d{9}$/.test(corporationNumber)) {
       newErrors.corporationNumber = "Corporation Number should be 9 digits";
@@ -62,6 +62,10 @@ function App() {
     const formattedPhoneNumber = formatPhoneNumber((e.target as HTMLInputElement).value);
     //  set the formatted phone number to the input value
     setFormattedPhoneNumber(formattedPhoneNumber);
+  };
+
+  const handleCorporationNumber = (value: string) => {
+    setCorporationNumber(value);
   };
 
   return (
@@ -100,19 +104,12 @@ function App() {
         error={errors.phoneNumber}
       />
 
-      <div>
-        <input
-          id="corporationNumber"
-          name="corporationNumber"
-          type="text"
-          required
-          value={corporationNumber}
-          onBlur={handleCorporationValidation}
-          onChange={(e) => setCorporationNumber(e.target.value)}
-        />
-        <label htmlFor="corporationNumber">Corporation Number</label>
-        {errors.corporationNumber && <p className="text-red-400">{errors.corporationNumber}</p>}
-      </div>
+      <CorporationNumberInput
+        handleCorporationNumber={handleCorporationNumber}
+        handleCorporationValidation={handleCorporationValidation}
+        error={errors.corporationNumber}
+        setIsValidCorporationNumber={() => {}}
+      />
 
     </form>
   )
