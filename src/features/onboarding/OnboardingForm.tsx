@@ -16,46 +16,46 @@ export function OnboardingForm() {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [serverMessage, setServerMessage] = useState<string>("");
 
-  function handleValidation() {
-    const newErrors: { firstName?: string; lastName?: string } = {};
-    if (!firstName) {
-      newErrors.firstName = "First Name is required";
-    } else if (firstName.length < 2) {
-      newErrors.firstName = "First Name is should be at least 2 characters";
-    }
-    else if (!/^[A-Za-z-]+$/.test(firstName)) {
-      newErrors.firstName = "First Name should contain only letters and dashes";
-    }
+  function handleNameValidation() {
+    setErrors((prevErrors) => {
+      const nameErrors: { firstName?: string; lastName?: string } = {};
+      if (!firstName) {
+        nameErrors.firstName = "First Name is required";
+      } else if (firstName.length < 2) {
+        nameErrors.firstName = "First Name is should be at least 2 characters";
+      }
+      else if (!/^[A-Za-z-]+$/.test(firstName)) {
+        nameErrors.firstName = "First Name should contain only letters and dashes";
+      }
 
-    if (!lastName) {
-      newErrors.lastName = "Last Name is required";
-    } else if (lastName.length < 2) {
-      newErrors.lastName = "Last Name is should be at least 2 characters";
-    }
-    else if (!/^[A-Za-z-]+$/.test(lastName)) {
-      newErrors.lastName = "Last Name should contain only letters and dashes";
-    }
-
-
-    setErrors(newErrors);
+      if (!lastName) {
+        nameErrors.lastName = "Last Name is required";
+      } else if (lastName.length < 2) {
+        nameErrors.lastName = "Last Name is should be at least 2 characters";
+      }
+      else if (!/^[A-Za-z-]+$/.test(lastName)) {
+        nameErrors.lastName = "Last Name should contain only letters and dashes";
+      }
+      return { ...prevErrors, ...nameErrors };
+    });
   }
 
   function handlePhoneValidation() {
-    const newErrors: { phoneNumber?: string } = {};
+    let phoneError: string | undefined = undefined;
     if (!/^\d{10}$/.test(phoneNumber)) {
-      newErrors.phoneNumber = "Phone Number should be 10 digits";
+      phoneError = "Phone Number should be 10 digits";
     } else if (isNotValidAreaCode(parseInt(phoneNumber.slice(0, 3), 10))) {
-      newErrors.phoneNumber = "Phone Number has invalid area code";
+      phoneError = "Phone Number has invalid area code";
     }
-    setErrors(newErrors);
+    setErrors((prevErrors) => ({ ...prevErrors, phoneNumber: phoneError }));
   }
 
   function handleCorporationValidation() {
-    const newErrors: { corporationNumber?: string } = {};
+    let corpError: string | undefined = undefined;
     if (!/^\d{9}$/.test(corporationNumber)) {
-      newErrors.corporationNumber = "Corporation Number should be 9 digits";
+      corpError = "Corporation Number should be 9 digits";
     }
-    setErrors(newErrors);
+    setErrors((prevErrors) => ({ ...prevErrors, corporationNumber: corpError }));
   }
 
   const handlePhoneNumber = (e: React.FormEvent<HTMLInputElement>) => {
@@ -123,7 +123,7 @@ export function OnboardingForm() {
           name="firstName"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
-          handleValidation={handleValidation}
+          handleValidation={handleNameValidation}
           required
           error={errors.firstName}
         />
@@ -133,7 +133,7 @@ export function OnboardingForm() {
           name="lastName"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
-          handleValidation={handleValidation}
+          handleValidation={handleNameValidation}
           required
           error={errors.lastName}
         />

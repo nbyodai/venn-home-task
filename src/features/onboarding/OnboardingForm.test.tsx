@@ -53,4 +53,25 @@ describe("OnboardingForm Submission", () => {
       expect(screen.getByText("some error occurred")).toBeInTheDocument();
     });
   });
+
+  it("maintains multiple errors simultaneously when different fields are blurred", async () => {
+    render(<OnboardingForm />);
+
+    // 1. Trigger First Name Error
+    const firstNameInput = screen.getByLabelText(/first name/i);
+    fireEvent.focus(firstNameInput);
+    fireEvent.blur(firstNameInput); // Should trigger "First Name is required"
+
+    expect(screen.getByText("First Name is required")).toBeInTheDocument();
+
+    // 2. Trigger Phone Error
+    const phoneInput = screen.getByLabelText(/phone number/i);
+    fireEvent.change(phoneInput, { target: { value: "123" } }); // Invalid length
+    fireEvent.blur(phoneInput); // Should trigger phone error
+
+    // 3. ASSERT: Both errors should exist
+    // THIS WILL FAIL currently because the phone validation wipes the name validation
+    expect(screen.getByText("Phone Number should be 10 digits")).toBeInTheDocument();
+    expect(screen.getByText("First Name is required")).toBeInTheDocument();
+  });
 });
