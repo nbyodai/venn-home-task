@@ -41,6 +41,8 @@ export function OnboardingForm() {
       }
       else if (!/^[A-Za-z-]+$/.test(firstName)) {
         nameErrors.firstName = "First Name should contain only letters and dashes";
+      } else {
+        nameErrors.firstName = undefined;
       }
 
       if (!lastName) {
@@ -50,6 +52,8 @@ export function OnboardingForm() {
       }
       else if (!/^[A-Za-z-]+$/.test(lastName)) {
         nameErrors.lastName = "Last Name should contain only letters and dashes";
+      } else {
+        nameErrors.lastName = undefined;
       }
       return { ...prevErrors, ...nameErrors };
     });
