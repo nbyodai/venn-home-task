@@ -3,6 +3,7 @@ import { isNotValidAreaCode, formatPhoneNumber } from "../../utils";
 import { CorporationNumberInput } from "./components/CorporationNumberInput";
 import { PhoneInput } from "./components/PhoneInput";
 import TextInput from "./components/TextInput";
+import { ENDPOINTS } from "../../api/endpoints";
 
 export function OnboardingForm() {
   const [firstName, setFirstName] = useState<string>("");
@@ -12,6 +13,8 @@ export function OnboardingForm() {
   const [corporationNumber, setCorporationNumber] = useState<string>("");
 
   const [errors, setErrors] = useState<{ firstName?: string; lastName?: string, phoneNumber?: string, corporationNumber?: string }>({});
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [serverMessage, setServerMessage] = useState<string>("");
 
   function handleValidation() {
     const newErrors: { firstName?: string; lastName?: string } = {};
@@ -68,8 +71,46 @@ export function OnboardingForm() {
     setCorporationNumber(value);
   };
 
+  const handleSubmit = async(e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("submitting");
+    setServerMessage("");
+
+    const payload = {
+      firstName,
+      lastName,
+      corporationNumber,
+      phone: `+1${phoneNumber}`,
+    };
+
+    try {
+      const response = await fetch(ENDPOINTS.PROFILE_DETAILS, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Something went wrong");
+      }
+
+      setStatus("success");
+      setServerMessage("Form submitted successfully!");
+    } catch (error) {
+      setStatus("error");
+      if(error instanceof Error) {
+        setServerMessage(error.message);
+      } else {
+        setServerMessage("Network error. Please try again later.");
+      }
+    }
+  }
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <h1 className="text-3xl font-bold">Onboarding Form</h1>
       <div>
         <div>
@@ -110,6 +151,19 @@ export function OnboardingForm() {
         error={errors.corporationNumber}
         setIsValidCorporationNumber={() => {}}
       />
+
+      <div>
+        <button type="submit">
+          {status === "submitting" ? "Submitting..." : "Submit"}
+        </button>
+      </div>
+      {status === "success" && (
+        <p className="text-green-600 font-bold mt-2">{serverMessage}</p>
+      )}
+
+      {status === "error" && (
+        <p className="text-red-600 font-bold mt-2">{serverMessage}</p>
+      )}
 
     </form>
   )
