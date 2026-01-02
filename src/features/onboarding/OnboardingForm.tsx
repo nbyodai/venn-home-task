@@ -91,6 +91,18 @@ export function OnboardingForm() {
     setCorporationNumber(value);
   };
 
+  // 1. Check if any errors currently exist in the state
+  const hasErrors = Object.values(errors).some((error) => error !== undefined);
+  // 2. Check if required fields are empty
+  // (Note: We use the raw 'phoneNumber' and 'corporationNumber' states here)
+  const hasEmptyFields =
+    !firstName ||
+    !lastName ||
+    !phoneNumber ||
+    !corporationNumber;
+  // 3. Derived State
+  const isFormInvalid = hasErrors || hasEmptyFields;
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setStatus("submitting");
@@ -177,7 +189,7 @@ export function OnboardingForm() {
       <div className="mt-8">
         <button
           type="submit"
-          disabled={status === "submitting"}
+          disabled={status === "submitting" || isFormInvalid}
           className="w-full bg-black text-white font-medium py-3 px-4 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {status === "submitting" ? (

@@ -74,4 +74,32 @@ describe("OnboardingForm Submission", () => {
     expect(screen.getByText("Phone Number should be 10 digits")).toBeInTheDocument();
     expect(screen.getByText("First Name is required")).toBeInTheDocument();
   });
+
+  it("disables the submit button until the form is fully valid", async () => {
+    render(<OnboardingForm />);
+    const submitBtn = screen.getByRole("button", { name: /submit/i });
+
+    // 1. Check Initial State: Should be disabled (fields are empty)
+    expect(submitBtn).toBeDisabled();
+
+    // 2. Fill only First Name: Should still be disabled
+    fireEvent.change(screen.getByLabelText(/first name/i), { target: { value: "John" } });
+    expect(submitBtn).toBeDisabled();
+
+    // 3. Fill the rest with VALID data
+    fireEvent.change(screen.getByLabelText(/last name/i), { target: { value: "Doe" } });
+
+    // Note: Use raw digits for Phone/Corp inputs based on your implementation
+    const phoneInput = screen.getByLabelText(/phone number/i);
+    fireEvent.change(phoneInput, { target: { value: "3062776103" } });
+
+    const corpInput = screen.getByLabelText(/corporation number/i);
+    fireEvent.change(corpInput, { target: { value: "123456789" } });
+
+    // 4. Check Final State: Should now be enabled
+    // We use waitFor just in case there are any state updates pending
+    await waitFor(() => {
+      expect(submitBtn).toBeEnabled();
+    });
+  });
 });
