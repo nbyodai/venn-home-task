@@ -1,20 +1,22 @@
 // https://www.delftstack.com/howto/react/react-format-phone-number/#create-the-custom-logic-to-format-the-phone-number
 export function formatPhoneNumber(input: string) {
-  //  if the input is null, return a null value
-  if (!input) return input;
-  // remove all characters from the input except number input.
+  // Return empty if null/undefined/empty string
+  if (!input) return "";
+  // Strip all non-digits
   const numberInput = input.replace(/[^\d]/g, "");
-  //  take the length of the value of the input
   const numberInputLength = numberInput.length;
-  // if the number length is 1, 2, or 3, then return it as it is.
+  // 1. Digits 0-3: Return "+1 (XXX"
+  // This ensures the formatting is stable from the very first character
   if (numberInputLength < 4) {
-    return numberInput;
-  } else if (numberInputLength < 7) {
-    // if the number input length is 4, 5, or 6, format it accordingly.
-    return `(${numberInput.slice(0, 3)}) ${numberInput.slice(3)}`;
-  } else {
-    //  if the number input length is 7, 8, 9, 10, or more, format it like the below.
-    return `(${numberInput.slice(0, 3)}) ${numberInput.slice(3,6)}-${numberInput.slice(6, 10)}`;
+    return `+1 (${numberInput}`;
+  }
+  // 2. Digits 4-6: Return "+1 (XXX) XXX"
+  else if (numberInputLength < 7) {
+    return `+1 (${numberInput.slice(0, 3)}) ${numberInput.slice(3)}`;
+  }
+  // 3. Digits 7+: Return "+1 (XXX) XXX-XXXX"
+  else {
+    return `+1 (${numberInput.slice(0, 3)}) ${numberInput.slice(3, 6)}-${numberInput.slice(6, 10)}`;
   }
 }
 

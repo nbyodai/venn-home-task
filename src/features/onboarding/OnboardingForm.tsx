@@ -88,13 +88,15 @@ export function OnboardingForm() {
     });
   }, []);
 
-  function handlePhoneNumber(e: React.FormEvent<HTMLInputElement>) {
+  const handlePhoneNumber = (e: React.FormEvent<HTMLInputElement>) => {
     const inputValue = (e.target as HTMLInputElement).value;
-    const rawDigits = inputValue.replace(/\D/g, "");
+    let rawDigits = inputValue.replace(/\D/g, "");
+    if (rawDigits.startsWith("1")) {
+      rawDigits = rawDigits.substring(1);
+    }
     if (rawDigits.length > 10) return;
     setPhoneNumber(rawDigits);
-    const formattedPhoneNumber = formatPhoneNumber(rawDigits);
-    setFormattedPhoneNumber(formattedPhoneNumber);
+    setFormattedPhoneNumber(formatPhoneNumber(rawDigits));
   };
 
   function handleCorporationNumber(value: string) {
