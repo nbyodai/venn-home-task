@@ -4,6 +4,7 @@ import { CorporationNumberInput } from "./components/CorporationNumberInput";
 import { PhoneInput } from "./components/PhoneInput";
 import TextInput from "./components/TextInput";
 import { ENDPOINTS } from "../../api/endpoints";
+import { useFormValidity } from "./hooks/useFormValidity";
 
 type OnboardingFormErrorsType = {
   firstName?: string;
@@ -22,6 +23,13 @@ export function OnboardingForm() {
   const [errors, setErrors] = useState<OnboardingFormErrorsType>({});
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [serverMessage, setServerMessage] = useState<string>("");
+
+  const isFormInvalid = useFormValidity(errors, {
+    firstName,
+    lastName,
+    phoneNumber,
+    corporationNumber
+  });
 
   function handleNameValidation() {
     setErrors((prevErrors) => {
@@ -90,18 +98,6 @@ export function OnboardingForm() {
   function handleCorporationNumber(value: string) {
     setCorporationNumber(value);
   };
-
-  // 1. Check if any errors currently exist in the state
-  const hasErrors = Object.values(errors).some((error) => error !== undefined);
-  // 2. Check if required fields are empty
-  // (Note: We use the raw 'phoneNumber' and 'corporationNumber' states here)
-  const hasEmptyFields =
-    !firstName ||
-    !lastName ||
-    !phoneNumber ||
-    !corporationNumber;
-  // 3. Derived State
-  const isFormInvalid = hasErrors || hasEmptyFields;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
