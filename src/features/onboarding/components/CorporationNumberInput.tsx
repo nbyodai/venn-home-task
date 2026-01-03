@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { useDebounce } from "../hooks/useDebounce";
-import { useCorporationValidation } from "../hooks/useCorporationValidation";
 import { ErrorText, FormInputLabel } from "@/components/ui";
 import { getInputClasses } from "@/utils";
+import { useCorporationValidation, useDebounce } from "../hooks";
 
 interface CorporationNumberInputProps {
   handleCorporationValidation: () => void;

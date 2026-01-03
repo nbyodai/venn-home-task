@@ -1,5 +1,5 @@
+import { ENDPOINTS } from "@/api/endpoints";
 import { useEffect, useRef } from "react";
-import { ENDPOINTS } from "../../../api/endpoints";
 
 interface UseCorporationValidationParams {
   corporationNumber: string;

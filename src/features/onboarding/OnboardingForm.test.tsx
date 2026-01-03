@@ -1,9 +1,9 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { OnboardingForm } from "./OnboardingForm";
-import { server } from "../../mocks/node";
 import { http } from "msw/core/http";
 import { HttpResponse } from "msw";
-import { ENDPOINTS } from "../../api/endpoints";
+import { ENDPOINTS } from "@/api/endpoints";
+import { server } from "@/mocks/node";
+import { OnboardingForm } from "./OnboardingForm";
 
 describe("OnboardingForm Submission", () => {
   it("submits the form successfully (200 OK)", async () => {
