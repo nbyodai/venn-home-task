@@ -1,3 +1,5 @@
+import { ErrorText, FormInputLabel } from "@/components/ui";
+import { getInputClasses } from "@/utils";
 import type { ChangeEvent } from "react";
 
 interface TextInputProps {
@@ -23,9 +25,7 @@ export function TextInput({
 }: TextInputProps) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={name} className="text-sm font-bold text-gray-800 ml-1">
-        {label}
-      </label>
+      <FormInputLabel name={name} label={label} />
       <input
         type="text"
         name={name}
@@ -35,11 +35,9 @@ export function TextInput({
         onChange={onChange}
         onBlur={handleValidation}
         required={required}
-        className={`w-full border rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:ring-1 focus:ring-black focus:border-black transition-colors ${
-          error ? "border-red-500 bg-red-50" : "border-gray-200 bg-white"
-        }`}
+        className={getInputClasses(!!error)}
       />
-      {error && <p className="text-red-500 text-sm ml-1">{error}</p>}
+      {error && <ErrorText error={error} />}
     </div>
   );
 }

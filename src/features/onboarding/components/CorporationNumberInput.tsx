@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useDebounce } from "../hooks/useDebounce";
 import { useCorporationValidation } from "../hooks/useCorporationValidation";
+import { ErrorText, FormInputLabel } from "@/components/ui";
+import { getInputClasses } from "@/utils";
 
 interface CorporationNumberInputProps {
   handleCorporationValidation: () => void;
@@ -38,7 +40,7 @@ export function CorporationNumberInput({
   };
 
   return <div className="flex flex-col gap-1.5">
-    <label htmlFor="corporationNumber" className="text-sm font-bold text-gray-800 ml-1">Corporation Number</label>
+    <FormInputLabel name="corporationNumber" label="Corporation Number" />
     <input
       name="corporationNumber"
       id="corporationNumber"
@@ -48,10 +50,8 @@ export function CorporationNumberInput({
       onBlur={handleCorporationValidation}
       maxLength={9}
       required
-      className={`w-full border rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:ring-1 focus:ring-black focus:border-black transition-colors ${
-        error ? "border-red-500 bg-red-50" : "border-gray-200 bg-white"
-      }`}
+      className={getInputClasses(!!error)}
     />
-    {error && <p className="text-red-500 text-sm ml-1">{error}</p>}
+    {error && <ErrorText error={error} />}
   </div>;
 }
