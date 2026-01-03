@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { isNotValidAreaCode, formatPhoneNumber } from "../../utils";
 import { CorporationNumberInput } from "./components/CorporationNumberInput";
 import { PhoneInput } from "./components/PhoneInput";
-import TextInput from "./components/TextInput";
+import { TextInput } from "./components/TextInput";
 import { ENDPOINTS } from "../../api/endpoints";
 import { useFormValidity } from "./hooks/useFormValidity";
 

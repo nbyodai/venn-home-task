@@ -10,7 +10,8 @@ interface TextInputProps {
   required?: boolean;
   error?: string;
 }
-function TextInput({
+
+export function TextInput({
   label,
   name,
   value,
@@ -42,5 +43,3 @@ function TextInput({
     </div>
   );
 }
-
-export default TextInput;
