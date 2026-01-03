@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { ENDPOINTS } from "../../../api/endpoints";
 
 interface UseCorporationValidationParams {
@@ -12,6 +12,14 @@ export function useCorporationValidation({
   onValid,
   onInvalid,
 }: UseCorporationValidationParams) {
+
+  const onValidRef = useRef(onValid);
+  const onInvalidRef = useRef(onInvalid);
+
+  useEffect(() => {
+    onValidRef.current = onValid;
+    onInvalidRef.current = onInvalid;
+  }, [onValid, onInvalid]);
 
   useEffect(() => {
     // 1. Guard clause: Don't validate if length is wrong
@@ -37,9 +45,9 @@ export function useCorporationValidation({
         const data = await response.json();
 
         if (data.valid) {
-          onValid(corporationNumber);
+          onValidRef.current(corporationNumber);
         } else {
-          onInvalid();
+          onInvalidRef.current();
         }
       } catch (error: unknown) {
         // Ignore AbortError (user typed again)
@@ -49,7 +57,7 @@ export function useCorporationValidation({
         // Treat network errors as invalid (or add onError callback if preferred)
         if (error instanceof Error) {
           console.error(error);
-          onInvalid();
+          onInvalidRef.current();
         }
       }
     }
@@ -60,5 +68,5 @@ export function useCorporationValidation({
     return () => {
       controller.abort();
     };
-  }, [corporationNumber, onValid, onInvalid]);
+  }, [corporationNumber]);
 }
