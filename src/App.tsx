@@ -1,9 +1,10 @@
-function App() {
+import { OnboardingForm } from "./features/onboarding/OnboardingForm";
 
+function App() {
   return (
-    <>
-      <h1 className="text-3xl font-bold underline">Vite + React</h1>
-    </>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <OnboardingForm />
+    </div>
   )
 }
 
